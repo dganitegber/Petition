@@ -1,5 +1,36 @@
 #canvas {
     border: solid 1px blue;
-    width: 40%;
+    /* width: 400px;
+    height: 100px; */
     background-image: url("Untitled-3.gif");
+    background-size: cover;
+}
+
+#coding {
+    object-fit: none;
+    width: 100%;
+    height: 200px;
+}
+
+body {
+    background-color: #01185e;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    color: #19b9fd;
+}
+
+h2 {
+    color: #19b9fd;
+}
+h3 {
+    color: #19b9fd;
+}
+
+text {
+    color: white;
 }

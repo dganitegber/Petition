@@ -16,7 +16,6 @@ $(document).ready(function() {
         prevY = currY;
         currX = e.pageX - canvas.offset().left + $(window).scrollLeft();
         currY = e.pageY - canvas.offset().top + $(window).scrollTop();
-        console.log(currX, currY);
 
         if (e.type == "mousedown") {
             flag = true;
@@ -36,4 +35,10 @@ $(document).ready(function() {
             }
         }
     });
+});
+
+$("#submit").on("click", function() {
+    var dataURL = $("#canvas")[0].toDataURL("image/png");
+    console.log("dataURL", dataURL);
+    $("#empty").val(dataURL);
 });
