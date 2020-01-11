@@ -14,3 +14,11 @@ exports.addSignature = function(first, last, signature) {
         [first, last, signature]
     );
 };
+
+exports.getAll = function() {
+    return db.query("SELECT * FROM signatures");
+};
+
+exports.countEntries = function() {
+    return db.query("SELECT id FROM signatures;");
+};

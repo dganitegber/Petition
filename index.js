@@ -4,6 +4,7 @@ const app = express();
 const db = require("./db");
 var cookieSession = require("cookie-session");
 const csurf = require("csurf");
+var noOfSigners = db.countEntries();
 
 const hb = require("express-handlebars");
 app.engine("handlebars", hb());
@@ -28,29 +29,42 @@ app.get("/", (req, res) => {
     res.render("home", {
         layout: "main"
     });
-    console.log("yay home");
 });
 
-app.get("/home", req => console.log(req.body));
+app.get("/home", () => console.log(""));
 
 app.post("/", (req, res) => {
     const body = req.body;
-    console.log(req.body, "29");
     //add conditions and ifs
-    db.addSignature(body.first, body.last, body.signature).then(results => {
-        const sign = req.body.signature;
-        const first = body.first;
-        console.log("data", results.rows);
-        // req.session.signatureID = results.rows[0].id;
-        // var id = results.rows[0].id;
-        res.redirect("/thanks").then(
-            res.render("thanks", {
-                layout: "main",
-                first,
-                sign
+    if (
+        body.first.length !== 0 &&
+        body.last.length !== 0 &&
+        body.signature.length != 1326
+    ) {
+        db.addSignature(body.first, body.last, body.signature)
+            .then(() => {
+                const sign = req.body.signature;
+                const first = body.first;
+
+                res.render("thanks", {
+                    layout: "main",
+                    first,
+                    sign,
+                    noOfSigners
+                });
             })
-        );
-    });
+            .catch(err => {
+                res.render("home", {
+                    err
+                });
+            });
+    } else {
+        const oops = "Please fill the correct forms";
+        res.render("home", {
+            err: "Error",
+            oops
+        });
+    }
 });
 
 app.listen(8080, () => console.log("port 8080 listening"));
