@@ -16,9 +16,9 @@ exports.addSignature = function(first, last, signature) {
 };
 
 exports.getAll = function() {
-    return db.query("SELECT * FROM signatures");
+    return db.query("SELECT * FROM signatures WHERE id > 0");
 };
 
-exports.countEntries = function() {
-    return db.query("SELECT id FROM signatures;");
+exports.getNames = function() {
+    return db.query("SELECT first FROM signatures WHERE id > 0");
 };

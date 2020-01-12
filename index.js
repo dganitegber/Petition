@@ -3,8 +3,7 @@ const express = require("express");
 const app = express();
 const db = require("./db");
 var cookieSession = require("cookie-session");
-const csurf = require("csurf");
-var noOfSigners = db.countEntries();
+// const csurf = require("csurf");
 
 const hb = require("express-handlebars");
 app.engine("handlebars", hb());
@@ -43,14 +42,17 @@ app.post("/", (req, res) => {
     ) {
         db.addSignature(body.first, body.last, body.signature)
             .then(() => {
-                const sign = req.body.signature;
-                const first = body.first;
-
-                res.render("thanks", {
-                    layout: "main",
-                    first,
-                    sign,
-                    noOfSigners
+                db.getAll().then(results => {
+                    console.log(results.rows.length);
+                    const sign = req.body.signature;
+                    const first = body.first;
+                    let noOfSigners = results.rows.length;
+                    res.render("thanks", {
+                        layout: "main",
+                        first,
+                        sign,
+                        noOfSigners
+                    });
                 });
             })
             .catch(err => {
@@ -65,6 +67,23 @@ app.post("/", (req, res) => {
             oops
         });
     }
+});
+
+app.get("/signers", (req, res) => {
+    db.getNames()
+        .then(results => {
+            console.log(results.rows);
+            var names = results.rows;
+            res.render("signers", {
+                layout: "main",
+                names
+            });
+        })
+        .catch(err => {
+            res.render("home", {
+                err
+            });
+        });
 });
 
 app.listen(8080, () => console.log("port 8080 listening"));
