@@ -1,6 +1,6 @@
 const spicedPg = require("spiced-pg");
 const db = spicedPg(
-    process.env.DATABSE_url ||
+    process.env.DATABSE_URL ||
         "postgres:petition:de168421@localhost:5432/petition"
 );
 
