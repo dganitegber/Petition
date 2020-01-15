@@ -1,0 +1,23 @@
+<h1>Please sign our petition</h1>
+
+<form class='register' method='POST'>
+    <div class="firstname">
+        <label for="first">First name:</label>
+        <input type="text" name="first" placeholder="First Name"><br><p class="oops">{{oops}}</p>
+    </div>
+    <div class="lastname">
+        <label for="last">Last name:</label>
+        <input type="text" name="last" placeholder="Last Name"><br><p class="oops">{{oops}}</p>
+    </div>
+    <div class="email">
+        <label for="email">Email address:</label>
+        <input type="text" name="email" placeholder="Please type your Email address"><br><p class="oops">{{oops}}</p>
+    </div>
+    <div class="password">
+        <label for="password">Password:</label>
+        <input type="password" name="password" placeholder="Please type password"><br><p class="oops">{{oops}}</p>
+    </div>
+    <input type="submit" value="Submit" id="submit">
+        <!-- <input type="submit" value="Login" id="register" href='/login'></input> -->
+    <h3> Already a member? <a href="/login">sign in!</a></p>
+</form>

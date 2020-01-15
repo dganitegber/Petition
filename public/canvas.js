@@ -39,7 +39,7 @@ $(document).ready(function() {
 
 $("#submit").on("click", function() {
     var dataURL = $("#canvas")[0].toDataURL("image/png");
-    console.log("dataURL", dataURL);
+    // console.log("dataURL", dataURL);
     $("#empty").val(dataURL);
 });
 

@@ -111,3 +111,7 @@ text {
     font-style: italic;
     color: #96a2a7;
 }
+
+label {
+    color: white;
+}
