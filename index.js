@@ -4,7 +4,7 @@ const app = express();
 const db = require("./db");
 const bcrypt = require("./bcrypt");
 var cookieSession = require("cookie-session");
-// const csurf = require("csurf");
+const csurf = require("csurf");
 
 const hb = require("express-handlebars");
 app.engine("handlebars", hb());
@@ -25,7 +25,24 @@ app.use(
 );
 //so req.body isn't empty
 app.get("/register", (req, res) => {
-    res.render("register", {
+    if (req.session.userId === undefined) {
+        console.log(req.session.userId, "req.session.userId", "login");
+        res.render("register", {
+            layout: "main"
+        });
+    } else {
+        console.log(req.session.userId, "req.session.userId", "login");
+        res.redirect("/petition");
+    }
+});
+app.get("/profile", (req, res) => {
+    res.render("profile", {
+        layout: "main"
+    });
+});
+
+app.get("/thanks", (req, res) => {
+    res.render("thanks", {
         layout: "main"
     });
 });
@@ -33,7 +50,9 @@ app.get("/register", (req, res) => {
 app.get("/login", (req, res) => {
     if (req.session.userId === undefined) {
         console.log(req.session.userId, "req.session.userId", "login");
-        res.redirect("/register");
+        res.render("login", {
+            layout: "main"
+        });
     } else {
         console.log(req.session.userId, "req.session.userId", "login");
         res.redirect("/petition");
@@ -66,8 +85,9 @@ app.post("/register", (req, res) => {
                 .then(results => {
                     console.log("results", results);
                     req.session.userId = results.rows[0].id;
-                    res.redirect("/petition");
+                    res.redirect("/profile");
                     console.log(req.session);
+                    console.log("register => profile form");
                 })
 
                 .catch(err => {
@@ -113,7 +133,7 @@ app.post("/login", (req, res) => {
                                             if (signature.rows.length > 0) {
                                                 var sign =
                                                     signature.rows[0].signature;
-                                                db.getAll()
+                                                db.getSigners()
                                                     .then(results => {
                                                         console.log("im here");
                                                         let noOfSigners =
@@ -180,7 +200,33 @@ app.post("/login", (req, res) => {
 });
 
 //----------------------app post login-----------------------
+//----------------------app post profile-----------------------
 
+app.post("/profile", (req, res) => {
+    var body = req.body;
+    var userid = req.session.userId;
+    console.log("body", body.homepage);
+    db.userProfile(body.age, body.city, body.homepage, userid)
+        .then(
+            db.getSigners().then(results => {
+                let noOfSigners = results.rows.length;
+                res.render("thanks", {
+                    layout: "main",
+                    // sign,
+                    noOfSigners
+                });
+                console.log("profile => signers");
+            })
+        )
+        .catch(err => {
+            console.log(err);
+            res.render("thanks", {
+                err
+            });
+        });
+});
+
+//----------------------app post profile-----------------------
 app.get("/register", (req, res) => {
     res.render("register", {
         layout: "main"
@@ -188,7 +234,7 @@ app.get("/register", (req, res) => {
 });
 
 app.get("/petition", (req, res) => {
-    db.getFirstName(req.session.userId)
+    db.getName(req.session.userId)
         .then(results => {
             var first = results.rows[0].first;
             var last = results.rows[0].last;
@@ -210,20 +256,14 @@ app.get("/petition", (req, res) => {
 app.post("/petition", (req, res) => {
     var body = req.body;
     //add conditions and ifs
-    if (
-        body.first.length !== 0 &&
-        body.last.length !== 0 &&
-        body.signature.length != 1326
-    ) {
+    if (body.signature.length != 1326) {
         db.addSignature(body.signature, req.session.userId)
             .then(() => {
-                db.getAll().then(results => {
+                db.getSigners().then(results => {
                     const sign = req.body.signature;
-                    const first = body.first;
-                    let noOfSigners = results.rows.length;
+                    var noOfSigners = results.rows.length;
                     res.render("thanks", {
                         layout: "main",
-                        first,
                         sign,
                         noOfSigners
                     });
@@ -235,30 +275,40 @@ app.post("/petition", (req, res) => {
                 });
             });
     } else {
-        const oops = "Please fill the correct forms";
+        const oops = "Please sign the petition";
         res.render("petition", {
             err: "Error",
             oops
         });
     }
+    app.use(csurf());
+
+    app.use(function(req, res, next) {
+        res.set("x-frame-options", "DENY");
+        res.locals.csrfToken = req.csrfToken();
+        next();
+    });
+    //////// **** finish csurf **** ///////
+    console.log("****** petition POST route ******");
 });
 
 app.get("/signers", (req, res) => {
-    db.getNames()
-        .then(results => {
-            console.log(results.rows);
-            var names = results.rows;
-            res.render("signers", {
-                layout: "main",
-                names
-            });
-        })
-        .catch(err => {
-            console.log(" error 231");
-            res.render("signers", {
-                err
-            });
+    db.getSigners().then(results => {
+        console.log("297", results);
+        let namesSigned = results.rows;
+        res.render("signers", {
+            layout: "main",
+            namesSigned
         });
+    }); ///get rest of info
 });
+
+// .then(firstname =>
+//     res.render("signers", {
+//         layout: "main",
+//
+//         firstname
+//     })
+// );
 
 app.listen(process.env.PORT || 8080, () => console.log("port 8080 listening"));
