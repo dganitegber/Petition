@@ -261,4 +261,4 @@ app.get("/signers", (req, res) => {
         });
 });
 
-app.listen(process.env.port || 8080, () => console.log("port 8080 listening"));
+app.listen(process.env.PORT || 8080, () => console.log("port 8080 listening"));
