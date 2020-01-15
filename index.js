@@ -16,9 +16,17 @@ app.use(
         extended: false
     })
 );
+
+let secrets;
+
+if (process.env.NODE_ENV === "production") {
+    secrets = process.env;
+} else {
+    secrets = require("/secrets");
+}
 app.use(
     cookieSession({
-        secret: `I'm always angry.`,
+        secret: secrets.COOKIE_SECRET,
         maxAge: 1000 * 60 * 60 * 24 * 7 * 6
     })
 );
