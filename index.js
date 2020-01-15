@@ -93,7 +93,7 @@ app.post("/register", (req, res) => {
                 .catch(err => {
                     console.log(err);
                     var oops = "Email address already exists!";
-                    console.log("this is the error");
+                    console.log("this is the error", err);
                     res.render("register", {
                         layout: "main",
                         oops
