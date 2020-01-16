@@ -11,6 +11,7 @@ app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
 app.use(express.static("./public"));
 // app.use("/jquery", express.static(__dirname + "/node_modules/jquery/dist/"));
+
 app.use(
     express.urlencoded({
         extended: false
@@ -23,6 +24,27 @@ app.use(
         maxAge: 1000 * 60 * 60 * 24 * 7 * 6
     })
 );
+// app.use(function(req, res, next) {
+//     res.set("x-frame-options", "DENY");
+//     res.locals.csrfToken = req.csrfToken();
+//     next();
+// });
+
+function requireLoggedOutUser(req, res, next) {
+    if (req.session.userId) {
+        res.redirect("/petition");
+    } else {
+        next();
+    }
+}
+
+app.use((req, res, next) => {
+    if (!req.session.userId && req.url != "/login" && req.url != "/register") {
+        res.redirect("/register");
+    } else {
+        next();
+    }
+});
 //so req.body isn't empty
 app.get("/register", (req, res) => {
     if (req.session.userId === undefined) {
@@ -36,8 +58,14 @@ app.get("/register", (req, res) => {
     }
 });
 app.get("/profile", (req, res) => {
-    res.render("profile", {
-        layout: "main"
+    db.getName(req.session.userId).then(results => {
+        let first = results.rows.first;
+        let last = results.rows.last;
+        res.render("profile", {
+            layout: "main",
+            first,
+            last
+        });
     });
 });
 
@@ -83,9 +111,13 @@ app.post("/register", (req, res) => {
             db.addUser(body.first, body.last, body.email, hashedpw)
 
                 .then(results => {
-                    console.log("results", results);
                     req.session.userId = results.rows[0].id;
-                    res.redirect("/profile");
+                    db.getName(req.session.userId).then(() => {
+                        // let first = results.rows.first;
+                        // let last = results.rows.last;
+                        res.redirect("profile");
+                    });
+
                     console.log(req.session);
                     console.log("register => profile form");
                 })
@@ -131,6 +163,7 @@ app.post("/login", (req, res) => {
                                     db.getSignature(req.session.userId).then(
                                         signature => {
                                             if (signature.rows.length > 0) {
+                                                console.log("im here", "170");
                                                 var sign =
                                                     signature.rows[0].signature;
                                                 db.getSigners()
@@ -203,21 +236,13 @@ app.post("/login", (req, res) => {
 //----------------------app post profile-----------------------
 
 app.post("/profile", (req, res) => {
+    console.log("*************POST PETITION******************");
     var body = req.body;
     var userid = req.session.userId;
-    console.log("body", body.homepage);
     db.userProfile(body.age, body.city, body.homepage, userid)
-        .then(
-            db.getSigners().then(results => {
-                let noOfSigners = results.rows.length;
-                res.render("thanks", {
-                    layout: "main",
-                    // sign,
-                    noOfSigners
-                });
-                console.log("profile => signers");
-            })
-        )
+        .then(() => {
+            res.redirect("petition");
+        })
         .catch(err => {
             console.log(err);
             res.render("thanks", {
@@ -234,23 +259,38 @@ app.get("/register", (req, res) => {
 });
 
 app.get("/petition", (req, res) => {
-    db.getName(req.session.userId)
-        .then(results => {
-            var first = results.rows[0].first;
-            var last = results.rows[0].last;
-
-            res.render("petition", {
-                layout: "main",
-                first,
-                last
-            });
-        })
-        .catch(err => {
+    if (req.session.userId === undefined) {
+        console.log(req.session.userId, "req.session.userId", "login");
+        res.render("register", {
+            layout: "main"
+        }).catch(err => {
             console.log(err);
-            res.render("petition", {
+            res.render("register", {
                 err
             });
         });
+    } else {
+        db.getSignature(req.session.userId).then(results => {
+            if (results.rows.signature !== undefined) {
+                res.redirect("thanks").catch(err => {
+                    console.log(err);
+                    res.render("thanks", {
+                        err
+                    });
+                });
+            } else {
+                db.getName(req.session.userId).then(results => {
+                    let first = results.rows[0].first;
+                    let last = results.rows[0].last;
+                    res.render("petition", {
+                        layout: "main",
+                        first,
+                        last
+                    });
+                });
+            }
+        });
+    }
 });
 
 app.post("/petition", (req, res) => {
