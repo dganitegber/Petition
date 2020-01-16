@@ -29,14 +29,14 @@ app.use(
 //     res.locals.csrfToken = req.csrfToken();
 //     next();
 // });
-
-function requireLoggedOutUser(req, res, next) {
-    if (req.session.userId) {
-        res.redirect("/petition");
-    } else {
-        next();
-    }
-}
+//
+// function requireLoggedOutUser(req, res, next) {
+//     if (req.session.userId) {
+//         res.redirect("/petition");
+//     } else {
+//         next();
+//     }
+// }
 
 app.use((req, res, next) => {
     if (!req.session.userId && req.url != "/login" && req.url != "/register") {
@@ -236,7 +236,6 @@ app.post("/login", (req, res) => {
 //----------------------app post profile-----------------------
 
 app.post("/profile", (req, res) => {
-    console.log("*************POST PETITION******************");
     var body = req.body;
     var userid = req.session.userId;
     db.userProfile(body.age, body.city, body.homepage, userid)
@@ -259,6 +258,9 @@ app.get("/register", (req, res) => {
 });
 
 app.get("/petition", (req, res) => {
+    console.log(
+        "**********************************************GET PETITION**********************************"
+    );
     if (req.session.userId === undefined) {
         console.log(req.session.userId, "req.session.userId", "login");
         res.render("register", {
@@ -271,7 +273,9 @@ app.get("/petition", (req, res) => {
         });
     } else {
         db.getSignature(req.session.userId).then(results => {
+            console.log(results, "277 results");
             if (results.rows.signature !== undefined) {
+                console.log(results.rows.signature);
                 res.redirect("thanks").catch(err => {
                     console.log(err);
                     res.render("thanks", {
@@ -279,9 +283,11 @@ app.get("/petition", (req, res) => {
                     });
                 });
             } else {
+                console.log("im in else", "286");
                 db.getName(req.session.userId).then(results => {
                     let first = results.rows[0].first;
                     let last = results.rows[0].last;
+                    console.log("288", first, last);
                     res.render("petition", {
                         layout: "main",
                         first,
@@ -294,7 +300,9 @@ app.get("/petition", (req, res) => {
 });
 
 app.post("/petition", (req, res) => {
+    console.log("***************POST PETITION********************");
     var body = req.body;
+    console.log(body, "306");
     //add conditions and ifs
     if (body.signature.length != 1326) {
         db.addSignature(body.signature, req.session.userId)
@@ -302,6 +310,7 @@ app.post("/petition", (req, res) => {
                 db.getSigners().then(results => {
                     const sign = req.body.signature;
                     var noOfSigners = results.rows.length;
+                    console.log(noOfSigners, "311");
                     res.render("thanks", {
                         layout: "main",
                         sign,
@@ -315,6 +324,7 @@ app.post("/petition", (req, res) => {
                 });
             });
     } else {
+        console.log(body.signature.length, "326");
         const oops = "Please sign the petition";
         res.render("petition", {
             err: "Error",
@@ -329,7 +339,6 @@ app.post("/petition", (req, res) => {
         next();
     });
     //////// **** finish csurf **** ///////
-    console.log("****** petition POST route ******");
 });
 
 app.get("/signers", (req, res) => {
