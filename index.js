@@ -342,15 +342,19 @@ app.get("/signers", (req, res) => {
     console.log(
         "*****************************************GET SIGNERS*********************************"
     );
-    db.getSigners().then(results => {
-        console.log("368", results);
-        let namesSigned = results.rows;
-        console.log("namesSigned", namesSigned);
-        res.render("signers", {
-            layout: "main",
-            namesSigned
+    db.getSigners()
+        .then(results => {
+            let namesSigned = results.rows;
+            console.log("namesSigned", namesSigned);
+            res.render("signers", {
+                layout: "main",
+                namesSigned
+            });
+        })
+        .catch(err => {
+            console.log(err);
         });
-    }); ///get rest of info
+    ///get rest of info
 });
 
 // .then(firstname =>
