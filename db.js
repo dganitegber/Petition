@@ -55,3 +55,14 @@ exports.signersList = function() {
         []
     );
 };
+
+exports.getNameAndSignature = function(id) {
+    return db.query(
+        "SELECT first, last, signature FROM users JOIN signatures ON users.id = signatures.user_id WHERE users.id=$1",
+        [id]
+    );
+};
+
+exports.countSigners = function() {
+    return db.query("SELECT COUNT(*) FROM signatures");
+};
