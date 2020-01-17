@@ -182,16 +182,22 @@ app.post("/profile", (req, res) => {
 });
 app.get("/profile", (req, res) => {
     console.log("*********************GET PROFILE*************************");
+    if (req.session.userId === undefined) {
+        console.log(req.session.userId, "req.session.userId", "login");
+        res.redirect("register");
+    } else {
+        console.log(req.session.userId, "req.session.userId", "login");
 
-    db.getName(req.session.userId).then(results => {
-        let first = results.rows[0].first;
-        let last = results.rows[0].last;
-        res.render("profile", {
-            layout: "main",
-            first,
-            last
+        db.getName(req.session.userId).then(results => {
+            let first = results.rows[0].first;
+            let last = results.rows[0].last;
+            res.render("profile", {
+                layout: "main",
+                first,
+                last
+            });
         });
-    });
+    }
 });
 
 app.get("/thanks", (req, res) => {
@@ -335,9 +341,21 @@ app.get("/edit", (req, res) => {
     console.log(
         "****************************************GET edit****************************************"
     );
-    res.render("edit", {
-        layout: "main"
-    });
+    if (req.session.userId === undefined) {
+        console.log(req.session.userId, "req.session.userId", "login");
+        res.redirect("register");
+    } else {
+        console.log(req.session.userId, "req.session.userId", "login");
+
+        db.getSigners().then(results => {
+            console.log(results);
+            res.render("edit", {
+                layout: "main"
+            }).catch(err => {
+                console.log(err);
+            });
+        });
+    }
 });
 app.get("/signers/:city", (req, res) => {
     console.log("***get signers by city***");

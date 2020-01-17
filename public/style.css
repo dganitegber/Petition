@@ -43,6 +43,15 @@ body {
     felx: 1 1;
     box-shadow: 4px 7px 10px rgba(0, 0, 0, 0.4);
 }
+.content {
+    width: 100%;
+    height: 30%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    felx: 1 1;
+}
 .main {
     width: 100%;
     display: flex;
@@ -78,6 +87,7 @@ text {
 
 .oops {
     color: #e72c2c;
+    margin-left: 20%;
 }
 .names {
     display: flex;
@@ -88,13 +98,13 @@ text {
 .profileEdit {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    width: 100%;
 }
 
 .unit {
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    justify-content: space-between;
     padding-left: 15px;
 }
 
@@ -226,9 +236,28 @@ label {
 
 #edit {
     box-shadow: 4px 7px 10px rgba(0, 0, 0, 0.4);
+    /* margin-left: 10px; */
+    margin-left: 35%;
+    margin-top: 20px;
 }
 #edit:hover {
     box-shadow: 0 0 0 0;
+}
+.register {
+    margin-left: 10px;
+}
+.login {
+    width: 100%;
+}
+.unitlogin {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    margin-left: 10px;
+    padding-right: 20px;
+}
+.unitlogin:input {
 }
 
 #submit {
@@ -236,4 +265,15 @@ label {
 }
 #submit:hover {
     box-shadow: 0 0 0 0;
+}
+
+.currentinput {
+    align-self: flex-end;
+    margin-right: 10%;
+    /* width: 200px; */
+}
+.current {
+    /* justify-content: flex-end; */
+    display: flex;
+    /* padding-right: 10%; */
 }
