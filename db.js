@@ -19,7 +19,7 @@ exports.addSignature = function(signature, id) {
 
 exports.getSigners = function() {
     return db.query(
-        "SELECT users.first, users.last, profiles.age, profiles.city FROM users LEFT JOIN profiles on profiles.user_id = users.id LEFT JOIN signatures on signatures.user_id = users.id"
+        "SELECT users.first, users.last, profiles.age, profiles.city FROM signatures LEFT JOIN profiles on signatures.user_id = profiles.user_id LEFT JOIN users on signatures.user_id = users.id"
     );
 };
 
@@ -65,4 +65,11 @@ exports.getNameAndSignature = function(id) {
 
 exports.countSigners = function() {
     return db.query("SELECT COUNT(*) FROM signatures");
+};
+
+exports.getSignersByCity = function(city) {
+    return db.query(
+        `SELECT users.first, users.last, signatures.signature, profiles.age, profiles.city, profiles.url FROM users JOIN signatures ON signatures.user_id = users.id JOIN profiles ON profiles.user_id = users.id WHERE LOWER (profiles.city) = LOWER($1)`,
+        [city]
+    );
 };

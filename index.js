@@ -12,41 +12,18 @@ app.set("view engine", "handlebars");
 app.use(express.static("./public"));
 
 // app.use("/jquery", express.static(__dirname + "/node_modules/jquery/dist/"));
-
 app.use(
     express.urlencoded({
         extended: false
     })
 );
-
 app.use(
     cookieSession({
         secret: `I'm always angry.`,
         maxAge: 1000 * 60 * 60 * 24 * 7 * 6
     })
 );
-// app.use(function(req, res, next) {
-//     res.set("x-frame-options", "DENY");
-//     res.locals.csrfToken = req.csrfToken();
-//     next();
-// });
-//
-// function requireLoggedOutUser(req, res, next) {
-//     if (req.session.userId) {
-//         res.redirect("/petition");
-//     } else {
-//         next();
-//     }
-// }
 
-app.use((req, res, next) => {
-    if (!req.session.userId && req.url != "/login" && req.url != "/register") {
-        res.redirect("/register");
-    } else {
-        next();
-    }
-});
-//so req.body isn't empty
 app.get("/register", (req, res) => {
     console.log("*********************GET REGISTER*************************");
 
@@ -60,69 +37,6 @@ app.get("/register", (req, res) => {
         res.redirect("/petition");
     }
 });
-app.get("/profile", (req, res) => {
-    console.log("*********************GET PROFILE*************************");
-
-    db.getName(req.session.userId).then(results => {
-        let first = results.rows[0].first;
-        let last = results.rows[0].last;
-        res.render("profile", {
-            layout: "main",
-            first,
-            last
-        });
-    });
-});
-
-app.get("/thanks", (req, res) => {
-    console.log("*********************GET THANKS*************************");
-    var noOfSigners;
-    db.countSigners()
-        .then(results => {
-            noOfSigners = results.rows[0].count;
-            console.log(noOfSigners, "83");
-        })
-        .then(() => db.getNameAndSignature(req.session.userId))
-        .then(find => {
-            let first = find.rows[0].first;
-            let last = find.rows[0].last;
-            let signature = find.rows[0].signature;
-
-            res.render("thanks", {
-                layout: "main",
-                first,
-                last,
-                signature,
-                noOfSigners
-            });
-        });
-});
-
-app.get("/login", (req, res) => {
-    console.log(
-        "****************************GET LOGIN****************************"
-    );
-    if (req.session.userId === undefined) {
-        console.log(req.session.userId, "req.session.userId", "login");
-        res.render("login", {
-            layout: "main"
-        });
-    } else {
-        console.log(req.session.userId, "req.session.userId", "login");
-        res.redirect("/petition");
-    }
-});
-
-app.get("/", (req, res) => {
-    if (req.session.userId === undefined) {
-        console.log(req.session.userId, "req.session.userId", "/");
-        res.redirect("/register");
-    } else {
-        console.log(req.session.userId, "req.session.userId", "/");
-        res.redirect("/petition");
-    }
-});
-//----------------------app post register-----------------------
 app.post("/register", (req, res) => {
     console.log(
         "******************************POST REGISTER*****************************"
@@ -168,14 +82,21 @@ app.post("/register", (req, res) => {
             oops
         });
     }
-}); //closes app.post register
-//----------------------app post register-----------------------
-app.use(
-    express.urlencoded({
-        extended: false
-    })
-);
-//----------------------app post login-----------------------
+});
+app.get("/login", (req, res) => {
+    console.log(
+        "****************************GET LOGIN****************************"
+    );
+    if (req.session.userId === undefined) {
+        console.log(req.session.userId, "req.session.userId", "login");
+        res.render("login", {
+            layout: "main"
+        });
+    } else {
+        console.log(req.session.userId, "req.session.userId", "login");
+        res.redirect("/petition");
+    }
+});
 app.post("/login", (req, res) => {
     console.log("*************************POST LOGIN*************************");
     var body = req.body;
@@ -242,9 +163,6 @@ app.post("/login", (req, res) => {
     }
 });
 
-//----------------------app post login-----------------------
-//----------------------app post profile-----------------------
-
 app.post("/profile", (req, res) => {
     console.log(
         "*********************************POSR PROFILE***************************"
@@ -262,12 +180,52 @@ app.post("/profile", (req, res) => {
             });
         });
 });
+app.get("/profile", (req, res) => {
+    console.log("*********************GET PROFILE*************************");
 
-//----------------------app post profile-----------------------
-app.get("/register", (req, res) => {
-    res.render("register", {
-        layout: "main"
+    db.getName(req.session.userId).then(results => {
+        let first = results.rows[0].first;
+        let last = results.rows[0].last;
+        res.render("profile", {
+            layout: "main",
+            first,
+            last
+        });
     });
+});
+
+app.get("/thanks", (req, res) => {
+    console.log("*********************GET THANKS*************************");
+    var noOfSigners;
+    db.countSigners()
+        .then(results => {
+            noOfSigners = results.rows[0].count;
+            console.log(noOfSigners, "83");
+        })
+        .then(() => db.getNameAndSignature(req.session.userId))
+        .then(find => {
+            let first = find.rows[0].first;
+            let last = find.rows[0].last;
+            let signature = find.rows[0].signature;
+
+            res.render("thanks", {
+                layout: "main",
+                first,
+                last,
+                signature,
+                noOfSigners
+            });
+        });
+});
+
+app.get("/", (req, res) => {
+    if (req.session.userId === undefined) {
+        console.log(req.session.userId, "req.session.userId", "/");
+        res.redirect("/register");
+    } else {
+        console.log(req.session.userId, "req.session.userId", "/");
+        res.redirect("/petition");
+    }
 });
 
 app.get("/petition", (req, res) => {
@@ -303,7 +261,6 @@ app.get("/petition", (req, res) => {
         });
     }
 });
-
 app.post("/petition", (req, res) => {
     console.log("***************POST PETITION********************");
     var body = req.body;
@@ -357,12 +314,46 @@ app.get("/signers", (req, res) => {
     ///get rest of info
 });
 
-// .then(firstname =>
-//     res.render("signers", {
-//         layout: "main",
-//
-//         firstname
-//     })
-// );
+app.get("/logout", (req, res) => {
+    console.log(
+        "****************************************GET LOGOUT****************************************"
+    );
+    req.session = null;
+    res.redirect("/bye");
+});
+
+app.get("/bye", (req, res) => {
+    console.log(
+        "****************************************GET bye****************************************"
+    );
+    res.render("bye", {
+        layout: "main"
+    });
+});
+
+app.get("/edit", (req, res) => {
+    console.log(
+        "****************************************GET edit****************************************"
+    );
+    res.render("edit", {
+        layout: "main"
+    });
+});
+app.get("/signers/:city", (req, res) => {
+    console.log("***get signers by city***");
+    const city = req.params.city;
+    console.log(req.params, "params");
+
+    db.getSignersByCity(city)
+        .then(results => {
+            let signersByCity = results.rows;
+            res.render("city", {
+                layout: "main",
+                signersByCity,
+                city
+            });
+        })
+        .catch(err => console.log("ERROR", err));
+});
 
 app.listen(process.env.PORT || 8080, () => console.log("port 8080 listening"));

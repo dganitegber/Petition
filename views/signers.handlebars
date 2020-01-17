@@ -1,12 +1,14 @@
 <h1 id='signedunder'>We, the singed under, support the right of our children, however low their math grades may be, to study Computer science in highscool.</h1>
 
-{{#namesSigned}}
-<p class="firstname" color="white">
-    {{first}}
-    {{last}},
-    {{age}}, 
-    {{city}}
-</p>
-{{/namesSigned}}
+<div class="names">
 
-<a id="button"></a>
+
+{{#namesSigned}}
+<div class="unit">
+
+{{first}} {{last}}
+{{age}},
+<a href="/signers/{{city}}"> {{city}}</a>
+</div>
+{{/namesSigned}}
+</div>
