@@ -4,7 +4,22 @@
     </head>
     <body>
 
+        <div class="left">
+            <form class='logout' action="/logout">
+                <button id='logout' style="background-color: transparent border: none" type="submit">LOG OUT</button>
+            </form>
+            <form class='editProfile' action="/logout">
+                <button id='editProfile' style="background-color: transparent border: none" type="submit">EDIT PROFILE</button>
+            </form>
+            <form class='deleteAccount' action="/logout">
+                <button id='deleteAccount' style="background-color: transparent border: none" type="submit">DELETE ACCOUNT</button>
+            </form>
+
+        </div>
+        <div class="main">
+
         {{{body}}}
+    </div>
 
     </body>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>

@@ -1,3 +1,7 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
 #canvas {
     border: solid 1px blue;
     /* width: 400px;
@@ -13,15 +17,32 @@
 }
 
 body {
-    background-color: #01185e;
+    background-color: #5e82f1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100%;
+}
+.left {
+    width: 200px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: gray;
+    height: 100%;
+    felx: 1 1;
+    box-shadow: 4px 7px 10px rgba(0, 0, 0, 0.4);
+}
+.main {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
 }
 
 h1 {
-    color: #19b9fd;
+    color: #0d445d;
 }
 
 h2 {
@@ -94,19 +115,7 @@ text {
     color: #6c767a;
     line-height: 1.9;
 }
-@media (min-width: 500px) {
-    .content {
-        width: 43%;
-    }
-    #button {
-        margin: 30px;
-    }
-}
-.content h1 {
-    margin-bottom: -10px;
-    color: #03a9f4;
-    line-height: 1.5;
-}
+
 .content h3 {
     font-style: italic;
     color: #96a2a7;
@@ -114,4 +123,56 @@ text {
 
 label {
     color: white;
+}
+
+#logout {
+    display: inline-block;
+    background: #9a4ef1;
+    padding: 0.3em 1.2em;
+    margin: 0 0.1em 0.1em 0;
+    border: 0.16em solid transparent;
+    border-radius: 2em;
+    text-decoration: none;
+    font-weight: 300;
+    color: white;
+    text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+    text-align: center;
+    transition: all 0.25;
+    margin-top: 15px;
+    box-shadow: 4px 7px 10px rgba(0, 0, 0, 0.4);
+}
+#deleteAccount {
+    display: inline-block;
+    background: #9a4ef1;
+    padding: 0.3em 1.2em;
+    margin: 0 0.1em 0.1em 0;
+    border: 0.16em solid transparent;
+    border-radius: 2em;
+    text-decoration: none;
+    font-weight: 300;
+    color: white;
+    text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+    text-align: center;
+    transition: all 0.25;
+    margin-top: 15px;
+    box-shadow: 4px 7px 10px rgba(0, 0, 0, 0.4);
+}
+#editProfile {
+    display: inline-block;
+    background: #9a4ef1;
+    padding: 0.3em 1.2em;
+    margin: 0 0.1em 0.1em 0;
+    border: 0.16em solid transparent;
+    border-radius: 2em;
+    text-decoration: none;
+    font-weight: 300;
+    color: white;
+    text-shadow: 0 0.04em 0.04em rgba(0, 0, 0, 0.35);
+    text-align: center;
+    transition: all 0.25;
+    margin-top: 15px;
+    box-shadow: 4px 7px 10px rgba(0, 0, 0, 0.4);
+}
+#logout:hover {
+     border: 0.16em solid white;
 }

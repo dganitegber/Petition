@@ -1,4 +1,5 @@
 console.log($);
+var HttpContext;
 
 $(document).ready(function() {
     var flag,
@@ -56,4 +57,18 @@ $(window).scroll(function() {
 btn.on("click", function(e) {
     e.preventDefault();
     $("html, body").animate({ scrollTop: 0 }, "300");
+});
+
+// $(".logout").on("click", function() {
+//     console.log(HttpSessionState.Current.session);
+// });
+
+$("#logout").on("mouseenter", function() {
+    console.log("i'm hovering");
+    $("#logout").css("box-shadow: 4px 7px 10px black");
+});
+
+$("#logout").on("mouseout", function() {
+    console.log("i'm hovering");
+    $("#logout").animate({ borderColor: "#fff" }, "fast");
 });

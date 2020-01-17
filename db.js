@@ -19,7 +19,7 @@ exports.addSignature = function(signature, id) {
 
 exports.getSigners = function() {
     return db.query(
-        "SELECT first, last, city, age FROM users JOIN signatures ON users.id = signatures.user_id JOIN profiles ON profiles.user_id = signatures.user_id"
+        "SELECT users.first, users.last, profiles.age, profiles.city FROM users LEFT JOIN profiles on profiles.user_id = users.id LEFT JOIN signatures on signatures.user_id = users.id"
     );
 };
 
@@ -51,7 +51,7 @@ exports.userProfile = function(age, city, url, user_id) {
 
 exports.signersList = function() {
     return db.query(
-        "SELECT first, last, city, age FROM users JOIN profiles ON users.id = user_id JOIN signatures ON profiles.user_id = signatures.user_id",
+        "SELECT * FROM users JOIN profiles ON users.id = user_id JOIN signatures ON profiles.user_id = signatures.user_id",
         []
     );
 };
