@@ -253,7 +253,6 @@ app.get("/petition", (req, res) => {
                 db.getName(req.session.userId).then(results => {
                     let first = results.rows[0].first;
                     let last = results.rows[0].last;
-                    console.log("288", first, last);
                     res.render("petition", {
                         layout: "main",
                         first,
@@ -373,5 +372,36 @@ app.get("/signers/:city", (req, res) => {
         })
         .catch(err => console.log("ERROR", err));
 });
+
+app.post("/deletesig", (req, res) => {
+    res.redirect("deletesig");
+});
+app.get("/deletesig", (req, res) => {
+    console.log("*******************GET DELETESIG***************************");
+    db.getNameAndSignature(req.session.userId).then(results => {
+        if (results.rows[0] === undefined) {
+            res.redirect("/petition");
+        } else {
+            let first = results.rows[0].first;
+            let signature = results.rows[0].signature;
+
+            res.render("deletesig", {
+                layout: "main",
+                first,
+                signature
+            });
+        }
+    });
+});
+
+app.post("/yesdel", (req, res) => {
+    console.log("+++++POST yesdel+++++");
+
+    db.deleteSignature(req.session.userId).then(() => {
+        res.redirect("/petition");
+    });
+});
+
+// app.get("/deleteSig", (req, res));
 
 app.listen(process.env.PORT || 8080, () => console.log("port 8080 listening"));

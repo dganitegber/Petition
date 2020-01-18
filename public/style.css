@@ -54,6 +54,7 @@ body {
 }
 .main {
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -243,11 +244,21 @@ label {
 #edit:hover {
     box-shadow: 0 0 0 0;
 }
+.enveleope {
+    margin-left: 10px;
+}
+.signature {
+    height: 100px;
+    width: 200px;
+}
 .register {
     margin-left: 10px;
 }
 .login {
     width: 100%;
+}
+#submit-login {
+    margin-left: 10px;
 }
 .unitlogin {
     display: flex;
@@ -258,6 +269,7 @@ label {
     padding-right: 20px;
 }
 .unitlogin:input {
+    align-items: center;
 }
 
 #submit {
@@ -265,6 +277,10 @@ label {
 }
 #submit:hover {
     box-shadow: 0 0 0 0;
+}
+
+.yesdel {
+    margin-left: 10px;
 }
 
 .currentinput {
@@ -276,4 +292,14 @@ label {
     /* justify-content: flex-end; */
     display: flex;
     /* padding-right: 10%; */
+}
+.footer {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    right: 0;
+}
+.footertext {
+    position: relative;
+    left: 90%;
 }

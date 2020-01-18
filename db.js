@@ -73,3 +73,11 @@ exports.getSignersByCity = function(city) {
         [city]
     );
 };
+
+exports.deleteSignature = function(user_id) {
+    return db.query(
+        `DELETE FROM signatures
+        WHERE user_id = $1`,
+        [user_id]
+    );
+};
