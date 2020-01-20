@@ -18,8 +18,9 @@
 
 input {
     height: 5vh;
-    width: 25vh;
+    width: 250px;
     margin-bottom: 10px;
+    margin-right: 50%;
     box-shadow: 4px 7px 10px rgba(0, 0, 0, 0.4);
     border-radius: 2px;
     border-color: transparent;
@@ -75,15 +76,8 @@ h3 {
 text {
     color: white;
 }
-.current {
-    margin-right: 150px;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-}
 .current:active {
     box-shadow: none;
-    align-self: center;
 }
 
 .oops {
@@ -105,7 +99,6 @@ text {
 .unit {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     padding-left: 15px;
 }
 
@@ -173,6 +166,8 @@ text {
 
 label {
     color: white;
+    flex: 1;
+    width: 30px;
 }
 
 #logout {
@@ -238,8 +233,8 @@ label {
 #edit {
     box-shadow: 4px 7px 10px rgba(0, 0, 0, 0.4);
     /* margin-left: 10px; */
-    margin-left: 35%;
     margin-top: 20px;
+    margin-left: 15px;
 }
 #edit:hover {
     box-shadow: 0 0 0 0;
@@ -249,7 +244,7 @@ label {
 }
 .signature {
     height: 100px;
-    width: 200px;
+    width: 400px;
 }
 .register {
     margin-left: 10px;
@@ -283,15 +278,10 @@ label {
     margin-left: 10px;
 }
 
-.currentinput {
-    align-self: flex-end;
-    margin-right: 10%;
-    /* width: 200px; */
-}
 .current {
-    /* justify-content: flex-end; */
-    display: flex;
-    /* padding-right: 10%; */
+    /* margin-right: 150px; */
+    flex: 2;
+    width: 100px;
 }
 .footer {
     position: absolute;

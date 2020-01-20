@@ -1,5 +1,4 @@
 console.log($);
-var HttpContext;
 
 $(document).ready(function() {
     var flag,
@@ -12,7 +11,7 @@ $(document).ready(function() {
     var canvas = $("#canvas");
     var ctx = canvas[0].getContext("2d");
 
-    canvas.on("mousemove mousedown mouseup mouseout", function(e) {
+    canvas.on("mousemove mousedown mouseenter mouseup", function(e) {
         prevX = currX;
         prevY = currY;
         currX = e.pageX - canvas.offset().left + $(window).scrollLeft();
@@ -21,7 +20,7 @@ $(document).ready(function() {
         if (e.type == "mousedown") {
             flag = true;
         }
-        if (e.type == "mouseup" || e.type == "mouseout") {
+        if (e.type == "mouseup") {
             flag = false;
         }
         if (e.type == "mousemove") {

@@ -175,7 +175,7 @@ app.post("/profile", (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            res.render("thanks", {
+            res.render("petition", {
                 err
             });
         });
@@ -346,16 +346,28 @@ app.get("/edit", (req, res) => {
     } else {
         console.log(req.session.userId, "req.session.userId", "login");
 
-        db.getSigners().then(results => {
-            console.log(results);
+        db.getCurrentInfo(req.session.userId).then(results => {
+            var first = results.rows[0].first;
+            var last = results.rows[0].last;
+            var emailAd = results.rows[0].email;
+            var passwordU = results.rows[0].password
+                .replace(/./g, "*")
+                .substring(0, 8);
+            var ageU = results.rows[0].age;
+            var city = results.rows[0].city;
             res.render("edit", {
-                layout: "main"
-            }).catch(err => {
-                console.log(err);
+                layout: "main",
+                first,
+                last,
+                emailAd,
+                passwordU,
+                ageU,
+                city
             });
         });
     }
 });
+
 app.get("/signers/:city", (req, res) => {
     console.log("***get signers by city***");
     const city = req.params.city;

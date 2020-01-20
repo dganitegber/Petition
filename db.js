@@ -81,3 +81,11 @@ exports.deleteSignature = function(user_id) {
         [user_id]
     );
 };
+
+exports.getCurrentInfo = function(id) {
+    return db.query(
+        "SELECT users.first, users.email, users.password, users.last, profiles.age, profiles.city, profiles.url FROM users JOIN profiles ON users.id = profiles.user_id WHERE profiles.user_id = $1",
+
+        [id]
+    );
+};
