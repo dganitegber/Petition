@@ -414,6 +414,11 @@ app.post("/yesdel", (req, res) => {
     });
 });
 
-// app.get("/deleteSig", (req, res));
+app.post("/profileEdit", res => {
+    console.log(
+        "****************************************Edit Profile****************************************"
+    );
+    res.redirect("/edit");
+}); // app.get("/deleteSig", (req, res));
 
 app.listen(process.env.PORT || 8080, () => console.log("port 8080 listening"));

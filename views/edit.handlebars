@@ -2,38 +2,38 @@
 
 <h1>You can edit your profile here</h1>
 <br>
-<form class="profileEdit"  method="post">
+<form class="profileEdit"  method="post" action='profileEdit'>
     <div class="unit">
         <label for="first">First name:</label>
         <div class="current">{{first}}</div>
-        <input class="currentinput" type="text" name="first" placeholder="First Name">
+        <input class="currentinput" type="text" name="first" placeholder="First Name" value={{first}}>
     </div>
     <div class="unit">
         <label for="last">Last name:</label>
         <div class="current">{{last}}</div>
-        <input class="currentinput" type="text" name="last" placeholder="Last Name">
+        <input class="currentinput" type="text" name="last" placeholder="Last Name" value={{last}}>
     </div>
     <div class="unit">
         <label for="email">Email address:</label>
         <div class="current">{{emailAd}}</div>
-        <input class="currentinput" type="text" name="email" placeholder="Please type your Email address">
+        <input class="currentinput" type="text" name="email" placeholder="Please type your Email address" value={{emailAd}}>
     </div>
     <div class="unit">
         <label for="password">Password:</label>
         <div class="current">{{passwordU}}</div>
-        <input class="currentinput" type="password" name="password" placeholder="Please type password">
+        <input class="currentinput" type="password" name="password" placeholder="Please type password" value={{passwordU}}>
     </div>
     <div class="unit">
         <label for="age">Age:</label>
         <div class="current">{{ageU}}</div>
-        <input class="currentinput" type="text" name="first" placeholder="Age">
+        <input class="currentinput" type="text" name="first" placeholder="Age" value={{ageU}}>
     </div>
     <div class="unit">
         <label for="city">City:</label>
         <div class="current">{{city}}</div>
-        <input class="currentinput" type="text" name="last" placeholder="city">
+        <input class="currentinput" type="text" name="last" placeholder="city" value={{city}}>
 
     </div>
-    <input type="submit" value="Save" id="edit">
+    <input type="submit" value="Save" id="edit" name='profileEdit'>
 
 </form>
